@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const categories = [
+    "Laptops", "Smartphones", "Gaming Consoles", "Cameras", "Audio Devices", "Monitors"
+  ];
 
   return (
     <>
@@ -27,13 +30,10 @@ const Navbar = () => {
                 <Search className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
               </div>
 
-              <Link
-                to="/rent"
-                className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
-              >
+              <Link to="/rent" className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
                 Rent Your Tech
               </Link>
-
+              
               <Link to="/login" className="flex items-center space-x-1 text-gray-600 hover:text-indigo-600">
                 <LogIn className="h-5 w-5" />
                 <span>Login</span>
@@ -47,10 +47,7 @@ const Navbar = () => {
 
             {/* Mobile menu button */}
             <div className="md:hidden">
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="text-gray-600 hover:text-gray-900"
-              >
+              <button onClick={() => setIsOpen(!isOpen)} className="text-gray-600 hover:text-gray-900">
                 {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
             </div>
@@ -62,7 +59,7 @@ const Navbar = () => {
       <div className="bg-gray-100 w-full fixed top-16 z-40 border-b">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center space-x-8 overflow-x-auto py-3 scrollbar-hide">
-            {["Laptops", "Smartphones", "Gaming Consoles", "Cameras", "Audio Devices", "Monitors"].map((category) => (
+            {categories.map(category => (
               <Link
                 key={category}
                 to={`/category/${category.toLowerCase()}`}
@@ -79,22 +76,13 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden fixed top-16 inset-x-0 z-30 bg-white shadow-lg">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            <Link
-              to="/rent"
-              className="block px-3 py-2 text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md"
-            >
+            <Link to="/rent" className="block px-3 py-2 text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md">
               Rent Your Tech
             </Link>
-            <Link
-              to="/login"
-              className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md"
-            >
+            <Link to="/login" className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md">
               Login
             </Link>
-            <Link
-              to="/profile"
-              className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md"
-            >
+            <Link to="/profile" className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md">
               Profile
             </Link>
           </div>
