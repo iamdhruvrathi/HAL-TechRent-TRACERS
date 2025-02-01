@@ -1,14 +1,14 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Profile from './pages/Profile';
-import RentProduct from './pages/RentProduct';
-import ProductDetails from './pages/ProductDetails';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Profile from "./pages/Profile";
+import RentProduct from "./pages/RentProduct";
+import ProductDetails from "./pages/ProductDetails";
 
-function App() {
+const App: React.FC = () => {
   return (
     <Router>
       <div className="min-h-screen flex flex-col">
@@ -26,6 +26,6 @@ function App() {
       </div>
     </Router>
   );
-}
+};
 
 export default App;
