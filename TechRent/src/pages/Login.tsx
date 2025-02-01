@@ -5,27 +5,56 @@ import axios from "axios";
 const Login = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     confirmPassword: "",
+    name: "",
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    
+    // Log the current state
+    console.log('Form submission attempted:', { isLogin, formData });
+    console.log('API URL:', import.meta.env.VITE_API_URL);
+
+    if (!isLogin && formData.password !== formData.confirmPassword) {
+      alert("Passwords don't match!");
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const url = isLogin ? "http://localhost:5000/login" : "http://localhost:5000/register";
-      const { data } = await axios.post(url, formData);
+      const url = isLogin 
+        ? `${import.meta.env.VITE_API_URL}/api/auth/login` 
+        : `${import.meta.env.VITE_API_URL}/api/auth/register`;
+      
+      console.log('Sending request to:', url);
+
+      const { data } = await axios.post(url, {
+        email: formData.email,
+        password: formData.password,
+        name: formData.name,
+      });
+
+      console.log('Response received:', data);
 
       if (isLogin) {
         localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
         navigate("/profile");
       } else {
         alert("Account created! Please login.");
         setIsLogin(true);
       }
     } catch (error) {
-      alert(error.response.data.error);
+      console.error('Error details:', error);
+      alert(error.response?.data?.message || "An error occurred. Please check the console for details.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -71,8 +100,12 @@ const Login = () => {
           </div>
         )}
 
-        <button type="submit" className="w-full bg-indigo-600 text-white p-2 rounded">
-          {isLogin ? "Login" : "Sign Up"}
+        <button 
+          type="submit" 
+          className="w-full bg-indigo-600 text-white p-2 rounded disabled:bg-indigo-300"
+          disabled={isLoading}
+        >
+          {isLoading ? "Processing..." : (isLogin ? "Login" : "Sign Up")}
         </button>
       </form>
 

@@ -55,22 +55,7 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Categories Bar */}
-      <div className="bg-gray-100 w-full fixed top-16 z-40 border-b">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center space-x-8 overflow-x-auto py-3 scrollbar-hide">
-            {categories.map(category => (
-              <Link
-                key={category}
-                to={`/category/${category.toLowerCase()}`}
-                className="text-gray-600 hover:text-indigo-600 whitespace-nowrap"
-              >
-                {category}
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
+      
 
       {/* Mobile Navigation */}
       {isOpen && (

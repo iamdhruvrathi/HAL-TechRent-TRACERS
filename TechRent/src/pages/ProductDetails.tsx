@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import * as config from '../config';
 
 interface Product {
   id: number;
@@ -22,14 +23,21 @@ const ProductDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/products/${id}`);
+        setIsLoading(true);
+        const response = await axios.get(`${config.API_URL}/api/products/${id}`);
         setProduct(response.data);
+        setError(null);
       } catch (error) {
         console.error("Error fetching product:", error);
+        setError("Failed to load product details");
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -38,8 +46,13 @@ const ProductDetails: React.FC = () => {
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!message.trim()) {
+      alert("Please enter a message");
+      return;
+    }
+
     try {
-      await axios.post("http://localhost:5000/messages", {
+      await axios.post(`${config.API_URL}/api/messages`, {
         productId: id,
         message,
       });
@@ -47,10 +60,28 @@ const ProductDetails: React.FC = () => {
       alert("Message sent successfully!");
     } catch (error) {
       console.error("Error sending message:", error);
+      alert("Failed to send message. Please try again.");
     }
   };
 
-  if (!product) return <p>Loading...</p>;
+  if (isLoading) return (
+    <div className="max-w-7xl mx-auto px-4 py-8 mt-28">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600 mx-auto"></div>
+        <p className="mt-4 text-gray-600">Loading product details...</p>
+      </div>
+    </div>
+  );
+
+  if (error) return (
+    <div className="max-w-7xl mx-auto px-4 py-8 mt-28">
+      <div className="text-center text-red-600">
+        <p>{error}</p>
+      </div>
+    </div>
+  );
+
+  if (!product) return null;
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 mt-28">
